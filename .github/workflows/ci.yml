@@ -7,13 +7,14 @@ on:
   pull_request:
     branches:
       - develop
-  push:# trigger on all branches
-    # (No branch filter so all branch pushes fire this workflow)
+  push:
+    branches:
+      - develop
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/develop' # only run build on develop
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -38,7 +39,7 @@ jobs:
           npm run build
 
   assign-reviewers:
-    if: github.event_name == 'pull_request' && github.base_ref == 'develop'
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Request Reviewers using GitHub Script
@@ -66,36 +67,3 @@ jobs:
             } else {
               console.log("No reviewers to assign after filtering PR author.");
             }
-
-  remove-node-modules:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          # Use the GitHub token with write permission to push changes
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Remove node_modules folders if present
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          echo "Checking for node_modules in backend and frontend..."
-          found=0
-          if [ -d "backend/node_modules" ]; then
-            echo "Removing backend/node_modules from tracking"
-            git rm -r --cached backend/node_modules || true
-            found=1
-          fi
-          if [ -d "frontend/node_modules" ]; then
-            echo "Removing frontend/node_modules from tracking"
-            git rm -r --cached frontend/node_modules || true
-            found=1
-          fi
-          if [ $found -eq 1 ]; then
-            git commit -m "ci: remove accidentally committed node_modules"
-            git push origin HEAD:${GITHUB_REF}
-          else
-            echo "No node_modules folders found."
-          fi
