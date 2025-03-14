@@ -215,7 +215,12 @@ async function syncTransactions(itemID, client) {
 
   console.log(`Successfully saved ${recently_added.length} transactions`);
 
-  // saving the cursor to the user document
+  // saving the updated_cursor to the user document
+  await User.findByIdAndUpdate(user._id, {
+    $set: { transaction_cursor: cursor }
+  }, { new: true }); // new: true returns the updated document (optional)
+
+  console.log(`Updated transaction cursor to: ${cursor}`);
 
   return {
     latest_transactions: recently_added,
@@ -325,4 +330,7 @@ router.post('/disconnect', auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  syncTransactions
+};

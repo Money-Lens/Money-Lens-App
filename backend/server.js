@@ -50,7 +50,7 @@ app.locals.plaidClient = client;
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/plaid', plaidRoutes);
+app.use('/api/plaid', plaidRoutes.router);
 app.use('/api/transactions', transactionsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 

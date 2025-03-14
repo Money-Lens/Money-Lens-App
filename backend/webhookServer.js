@@ -1,7 +1,7 @@
 require("dotenv").config({ path: '.env' });
 const express = require("express");
 const bodyParser = require("body-parser");
-const {processTransactions} = require("./routes/plaidRoutes");
+const { syncTransactions} = require("./routes/plaidRoutes");
 
 const WEBHOOK_PORT = process.env.WEBHOOK_PORT || 8001;
 
@@ -41,9 +41,8 @@ webhookApp.post("/server/receive_webhook", async (req, res, next) => {
     switch (code) {
       case "SYNC_UPDATES_AVAILABLE":
         console.log("Webhook Sync updates are available");
-        // const client = webhookApp.locals.plaidClient;
-        // const user_id = req.body.item_id;
-        // processTransactions(client, user_id);
+        const client = req.app.locals.plaidClient;
+        syncTransactions(client, req.body.item_id);
         break;
       default:
         console.log(`Can't handle webhook code ${code}`);
