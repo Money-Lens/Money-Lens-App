@@ -158,6 +158,24 @@ export default function Home() {
     }
   };
 
+  // New function to fire test webhook
+  const fireTestWebhook = async () => {
+    setIsLoading(true);
+    try {
+      const response = await apiRequest('/plaid/fire_test_webhook', {
+        method: 'POST',
+      });
+      console.log('Webhook fired response:', response);
+      alert('Test webhook fired successfully! Check your server logs.');
+    } catch (error) {
+      console.error('Error firing test webhook:', error);
+      alert('Failed to fire test webhook');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
   const config = {
     token: linkToken!,
     onSuccess,
@@ -196,6 +214,8 @@ export default function Home() {
               ))}
             </div>
 
+
+
             <div style={styles.buttonGroup}>
               <button
                 onClick={() => window.location.reload()}
@@ -210,6 +230,15 @@ export default function Home() {
               >
                 {isLoading ? 'Disconnecting...' : 'Disconnect Account'}
               </button>
+              {/* New Fire Test Webhook Button */}
+              <button
+                onClick={fireTestWebhook}
+                style={styles.fireWebhookButton}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Firing...' : 'Fire Test Webhook'}
+              </button>
+
             </div>
           </>
         ) : (
@@ -370,6 +399,15 @@ const styles = {
   },
   disconnectButton: {
     backgroundColor: '#dc3545',
+    color: 'white',
+    padding: '12px 24px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
+  },
+  fireWebhookButton: {
+    backgroundColor: '#ff9800', // Orange for distinction
     color: 'white',
     padding: '12px 24px',
     border: 'none',

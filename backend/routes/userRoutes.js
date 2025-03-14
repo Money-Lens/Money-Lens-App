@@ -41,7 +41,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Get all users
+// Get all users 
 router.get('/', async (req, res) => {
   try {
     const users = await User.find(); // Fetch all users from MongoDB

@@ -151,7 +151,14 @@ router.get('/transactions', auth, async (req, res) => {
   try {
     const client = req.app.locals.plaidClient;
     const user_id = req.user._id;
-    const result = await processTransactions(client, user_id);
+    const user = await User.findById(user_id).select('plaidItemId');
+    if (!user || !user.plaidItemId) {
+      return res.status(400).json({ error: 'No Plaid item ID found for this user' });
+    }
+    const itemID = user.plaidItemId;
+    // Call syncTransactions with itemID
+    const result = await syncTransactions(itemID, client);
+
     res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.toString() });
@@ -160,94 +167,67 @@ router.get('/transactions', auth, async (req, res) => {
 
 });
 
-async function processTransactions(client, user_id) {
-  try {
-    const user = await User.findById(user_id);
-    if (!user?.plaidAccessToken) {
-      throw new Error('No Plaid access token found');
-    }
+async function syncTransactions(itemID, client) {
+  // find user based on itemID
+  try{
+  const user = await User.findOne({ plaidItemId: itemID })
+  .select('plaidAccessToken _id transaction_cursor'); 
 
-    let cursor = user.transaction_cursor || null;
-    let added = [];
-    let modified = [];
-    let removed = [];
-    let hasMore = true;
+  if (!user) {
+    throw new Error(`No user found with itemID: ${itemID}`);
+  }
+  let cursor = user.transaction_cursor; 
+  let added = [];
+  let modified = [];
+  let removed = [];
+  let hasMore = true;
 
-    while (hasMore) {
-      const syncResponse = await client.transactionsSync({
-        access_token: user.plaidAccessToken,
-        cursor: cursor,
-      });
-      const data = syncResponse.data;
-      cursor = data.next_cursor;
-
-      if (cursor === '') {
-        await sleep(2000);
-        continue;
-      }
-
-      added = added.concat(data.added);
-      modified = modified.concat(data.modified);
-      removed = removed.concat(data.removed);
-      hasMore = data.has_more;
-
-      prettyPrintResponse(syncResponse);
-    }
-
-    const compareTxnsByDateAscending = (a, b) =>
-      (a.date < b.date) - (a.date > b.date);
-    const recently_added = [...added].sort(compareTxnsByDateAscending);
-
-    const savePromises = recently_added.map((transaction) =>
-      saveTransaction(transaction, user_id)
-    );
-    await Promise.all(savePromises);
-
-    console.log(`Successfully saved ${recently_added.length} transactions`);
-
-    await User.findByIdAndUpdate(user_id, {
-      $set: { transaction_cursor: cursor },
+  while (hasMore) {
+    const syncResponse = await client.transactionsSync({
+      access_token: user.plaidAccessToken,
+      cursor: cursor,
     });
+    const data = syncResponse.data;
+    cursor = data.next_cursor;
 
-    console.log(`Updated transaction cursor to: ${cursor}`);
+    if (cursor === '') {
+      await sleep(2000);
+      continue;
+    }
 
-    return {
-      latest_transactions: recently_added,
-      message: `${recently_added.length} transactions saved to database`,
-    };
-  } catch (error) {
+    added = added.concat(data.added);
+    modified = modified.concat(data.modified);
+    removed = removed.concat(data.removed);
+    hasMore = data.has_more;
+
+    prettyPrintResponse(syncResponse);
+  }
+  // compare transactions by date
+  const compareTxnsByDateAscending = (a, b) =>
+    (a.date < b.date) - (a.date > b.date);
+  const recently_added = [...added].sort(compareTxnsByDateAscending);
+
+  // save all transactions to database
+  const savePromises = recently_added.map((transaction) =>
+    saveTransaction(transaction, user._id)
+  );
+  await Promise.all(savePromises);
+
+  console.log(`Successfully saved ${recently_added.length} transactions`);
+
+  // saving the cursor to the user document
+
+  return {
+    latest_transactions: recently_added,
+    message: `${recently_added.length} transactions saved to database`,
+  };
+
+  }catch (error) {
     console.error(error);
     throw error;
   }
 }
 
-// Testing webhook in sandbox environment by firing a test webhook.
-router.post('/fire_test_webhook', auth, async (req, res) => {
-  try {
-    const client = req.app.locals.plaidClient;
-    const user = await User.findById(req.user._id);
-
-    if (!user?.plaidAccessToken) {
-      return res.status(400).json({ error: 'No Plaid access token found' });
-    }
-
-    const webhookResponse = await client.sandboxItemFireWebhook({
-      access_token: user.plaidAccessToken,
-      webhook_type: 'TRANSACTIONS', // Match your webhook server's handling
-      webhook_code: 'SYNC_UPDATES_AVAILABLE', // Test the SYNC_UPDATES_AVAILABLE case
-    });
-
-    prettyPrintResponse(webhookResponse);
-    res.json({
-      status: 'success',
-      message: 'Webhook fired successfully',
-      data: webhookResponse.data,
-    });
-  } catch (error) {
-    console.error('Error firing webhook:', error);
-    res.status(500).json({ error: error.toString() });
-  }
-});
 
 //Retrieve Transacstions for an Item using transactionsSync
 // router.get('/transactions', auth, async (req, res) => {
