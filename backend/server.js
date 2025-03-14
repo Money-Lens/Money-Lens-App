@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const plaidRoutes = require('./routes/plaidRoutes');
 const transactionsRoutes = require('./routes/transactionsRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const {getWebhookServer}  = require('./webhookServer');
 
 require('dotenv').config({ path: '.env' });
 const cookieParser = require('cookie-parser');
@@ -57,3 +58,5 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
+const webhookServer = getWebhookServer();

@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   // Plaid-related fields
   plaidAccessToken: { type: String },
   plaidItemId: { type: String },
+  transaction_cursor: { type: String, default: null }, // For storing the cursor for the /transactions/get endpoint
   // transactions: [ {type: Transaction, ref: 'transactions'} ],
 });
 
