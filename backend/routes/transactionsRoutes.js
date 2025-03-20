@@ -4,7 +4,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
-const { Transaction, saveTransaction } = require('../models/Transaction.model');
+const { Transaction} = require('../models/Transaction.model');
 const auth = require('../middleware/auth.middleware');
 
 const router = express.Router();
