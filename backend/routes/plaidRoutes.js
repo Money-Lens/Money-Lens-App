@@ -2,7 +2,7 @@ const express = require('express');
 const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
 const { Products } = require('plaid');
-const { saveTransaction } = require('../models/Transaction.model');
+//const { saveTransaction } = require('../models/Transaction.model');
 const User = require('../models/User.model');
 const auth = require('../middleware/auth.middleware');
 
