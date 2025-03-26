@@ -110,7 +110,13 @@ describe('Analysis Routes Integration Test', () => {
       .set('Authorization', `Bearer ${fakeToken}`);
 
     expect(res.status).toBe(200);
+<<<<<<< HEAD
     // The API returns an empty object for users not found, not a 404 error
     expect(res.body).toEqual({});
   });
+=======
+    expect(res.body).toEqual({}); 
+});
+
+>>>>>>> cf59f3a (Updated the imports and tests)
 });

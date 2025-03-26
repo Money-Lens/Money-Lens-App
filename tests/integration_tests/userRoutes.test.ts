@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf59f3a (Updated the imports and tests)
 import request from 'supertest';
 import express from 'express';
 import * as db from './testdb';
@@ -17,16 +20,16 @@ app.use('/api', userRoutes);
 describe("UserRoutes Integration test", () => {
   beforeAll(async () => {
     await db.connect();
-  }, 10000);
+  });
 
 
   afterEach(async () => {
     await db.clearDatabase();
-  }, 10000);
+  });
 
   afterAll(async () => {
     await db.closeDatabase();
-  }, 10000);
+  });
 
   const testUser = {
     firstName: "TestUser1",

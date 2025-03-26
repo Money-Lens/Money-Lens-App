@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 import { describe, it, expect, beforeAll, afterEach, afterAll } from '@jest/globals';
 import  { connect, clearDatabase, closeDatabase } from '../testdb'
 
@@ -6,6 +7,12 @@ import  { connect, clearDatabase, closeDatabase } from '../testdb'
 const { getTodaySpending, getMonthlySpending, getWeeklySpending, getRecentTransactions, getDashboardData } = require('../../backend/logic/dashboardLogic.js');
 const User = require('../../backend/models/User.model.js');
 const { Transaction } = require('../../backend/models/Transaction.model.js');
+=======
+import  { connect, clearDatabase, closeDatabase } from '../testdb'
+import {getTodaySpending,  getMonthlySpending, getWeeklySpending, getRecentTransactions, getDashboardData,} from '../../backend/logic/dashboardLogic';
+import  User  from '../../backend/models/User.model';
+import Transaction from '../../backend/models/Transaction.model'
+>>>>>>> cf59f3a (Updated the imports and tests)
 
 beforeAll(async () => await connect());
 afterEach(async () => await clearDatabase());
@@ -28,7 +35,7 @@ describe('getTodaySpending', () => {
 
       const result = await getTodaySpending(transactions as any);
       
-      expect(result).toBeCloseTo(45.5, 2); // 50.25 - 20.50 + 15.75 = 45.5
+      expect(result).toBeCloseTo(45.5, 2);
   });
 
   it('should return 0 if no transactions for today', async () => {
