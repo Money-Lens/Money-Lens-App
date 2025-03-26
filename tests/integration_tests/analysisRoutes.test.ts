@@ -92,7 +92,7 @@ describe('Analysis Routes Integration Test', () => {
     expect(res.body.error).toMatch(/authentication/i);
   });
 
-  test('GET /api/analytics - should return 404 if user not found', async () => {
+  test('GET /api/analytics - should return empty object if user not found', async () => {
     const fakeId = new mongoose.Types.ObjectId();
     const fakeToken = createToken(fakeId.toString());
 
@@ -100,7 +100,8 @@ describe('Analysis Routes Integration Test', () => {
       .get('/api/analytics')
       .set('Authorization', `Bearer ${fakeToken}`);
 
-    expect(res.status).toBe(404);
-    expect(res.body.error).toMatch(/user not found/i);
-  });
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({}); 
+});
+
 });

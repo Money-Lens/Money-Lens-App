@@ -1,8 +1,8 @@
 
-import  { connect, clearDatabase, closeDatabase } from './integration_tests/testdb'
-import {getTodaySpending,  getMonthlySpending, getWeeklySpending, getRecentTransactions, getDashboardData,} from './../backend/logic/dashboardLogic';
-import  User  from '../backend/models/User.model';
-import Transaction from '../backend/models/Transaction.model'
+import  { connect, clearDatabase, closeDatabase } from '../testdb'
+import {getTodaySpending,  getMonthlySpending, getWeeklySpending, getRecentTransactions, getDashboardData,} from '../../backend/logic/dashboardLogic';
+import  User  from '../../backend/models/User.model';
+import Transaction from '../../backend/models/Transaction.model'
 
 beforeAll(async () => await connect());
 afterEach(async () => await clearDatabase());
@@ -25,7 +25,7 @@ describe('getTodaySpending', () => {
 
       const result = await getTodaySpending(transactions as any);
       
-      expect(result).toBeCloseTo(45.5, 2); // 50.25 - 20.50 + 15.75 = 45.5
+      expect(result).toBeCloseTo(45.5, 2);
   });
 
   it('should return 0 if no transactions for today', async () => {
