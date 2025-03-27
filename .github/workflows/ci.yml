@@ -6,10 +6,10 @@ permissions:
 on:
   pull_request:
     branches:
-      - develop
+      - SonarCloud
   push:
     branches:
-      - develop
+      - SonarCloud
 
 jobs:
   build:
@@ -45,6 +45,8 @@ jobs:
             -Dsonar.organization=money-lens
             -Dsonar.projectKey=Money-Lens_Money-Lens-App
             -Dsonar.projectName=Money-Lens-App
+            -Dsonar.qualitygate.wait=false
+
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
