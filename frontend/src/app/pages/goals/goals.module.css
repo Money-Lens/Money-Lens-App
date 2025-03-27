@@ -291,3 +291,24 @@
   flex-direction: column;
   padding-right: 10px;
 }
+
+.subGoalsInput input[type="number"]::-webkit-outer-spin-button,
+.subGoalsInput input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.subGoalsInput input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+.goalAmount input[type="number"]::-webkit-outer-spin-button,
+.goalAmount input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.goalAmount input[type="number"] {
+  -moz-appearance: textfield;
+}

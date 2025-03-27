@@ -23,29 +23,35 @@ export default function GoalsPage() {
   // Fetch goals from MongoDB when component mounts
   useEffect(() => {
 
-  const fetchGoals = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      console.log('Fetching goals from API...');
-      const data = await apiRequest('/goals', { requireAuth: true });
-      console.log('Parsed JSON data:', data);
+
+    const fetchGoals = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        console.log('Fetching goals from API...');
+        // const response = await apiRequest('/goals', { requireAuth: true });
+        const data = await apiRequest('/goals', { requireAuth: true });
+        console.log('Parsed JSON data:', data);
+
+        setGoals(data.map((goal) => ({
+          ...goal,
+          targetDate: new Date(goal.targetDate),
+        })));
+      } catch (error) {
+        console.error('Error fetching goals:', error);
+        setError('Failed to load your goals. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGoals();
+  }, []);
 
 
-      setGoals(data.map((goal) => ({
-        ...goal,
-        targetDate: new Date(goal.targetDate),
-      })));
-    } catch (error) {
-      console.error('Error fetching goals:', error);
-      setError('Failed to load your goals. Please try again later.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  fetchGoals();
-}, []);
+  
 
   const calculateProgress = (current: number, target: number) => {
     return Math.min((current / target) * 100, 100);
