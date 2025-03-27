@@ -22,15 +22,70 @@ export default function GoalsPage() {
 
   // Fetch goals from MongoDB when component mounts
   useEffect(() => {
+  //   const fetchGoals = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       setError(null);
+    
+  //       console.log('Fetching goals from API...');
+  //       const response = await apiRequest('/goals', { requireAuth: true });
+    
+  //       // Log response for debugging
+  //       // console.log('Raw response as text:', response.text);
+  //       console.log('Raw response:', response);
+  //       console.log('JSON.parse response:', JSON.parse(response));
+    
+  //       if (!response.ok) {
+  //         console.error('Response not OK:', response.status, response.statusText);
+  //         throw new Error(`API error: ${response.status} ${response.statusText}`);
+  //       }
+    
+  //       const text = await response.text(); // Get raw response text
+  //       console.log('Raw response text:', text);
+    
+  //       // Try to parse it as JSON
+  //       const data = JSON.parse(text);
+  //       console.log('Parsed JSON data:', data);
+    
+  //       setGoals(data.map((goal: any) => ({
+  //         ...goal,
+  //         targetDate: new Date(goal.targetDate),
+  //       })));
+  //     } catch (error) {
+  //       console.error('Error fetching goals:', error);
+  //       setError('Failed to load your goals. Please try again later.');
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  
+  //   fetchGoals();
+  // }, []);
 
   const fetchGoals = async () => {
     try {
       setIsLoading(true);
       setError(null);
+
       console.log('Fetching goals from API...');
+      // const response = await apiRequest('/goals', { requireAuth: true });
       const data = await apiRequest('/goals', { requireAuth: true });
       console.log('Parsed JSON data:', data);
 
+      // Log response for debugging
+    //  console.log('Raw response:', response);
+
+      // if (!response.ok) {
+      //   console.error('Response not OK:', response.status, response.statusText);
+      //   throw new Error(API error: ${response.status} ${response.statusText});
+      // }
+
+      // const text = await response.text(); // Get raw response text
+      // console.log('Raw response text:', text);
+
+      // // Try to parse it as JSON
+      // const data = JSON.parse(text);
+      // console.log('Parsed JSON data:', data);
 
       setGoals(data.map((goal) => ({
         ...goal,

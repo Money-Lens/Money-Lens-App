@@ -117,7 +117,7 @@ router.get('/', auth, async (req, res) => {
       // res.json(JSON.stringify(goals)); 
       res.json(goals); 
     } else {
-      res.json([]);
+      res.json();
     }
     
   } catch (error) {
@@ -140,10 +140,7 @@ router.post('/', auth, async (req, res) => {
       return res.status(400).json({ error: 'Title is required' });
     }
     
-    // if (!targetAmount) {
-    //   return res.status(400).json({ error: 'Target amount is required' });
-    // }
-    if (targetAmount === undefined || targetAmount === null || targetAmount === '') {
+    if (!targetAmount) {
       return res.status(400).json({ error: 'Target amount is required' });
     }
     
