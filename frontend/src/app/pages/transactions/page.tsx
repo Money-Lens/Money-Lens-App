@@ -29,6 +29,9 @@ import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import AlertBanner from '@/app/components/AlertBanner';
+
+
 export default function Transaction() {
   const [fromDate, setFromDate] = useState<string>('');
   const [toDate, setToDate] = useState<string>('');
@@ -73,6 +76,13 @@ export default function Transaction() {
     category: '',
     date: '',
   });
+
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
+  const showAlert = (message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+    setAlertMessage(message);
+    setAlertType(type);
+  };
 
   // Initial load of transactions
   useEffect(() => {
@@ -155,11 +165,13 @@ export default function Transaction() {
       setSelectedTransactions(new Set());
 
       if (data.count === 0)
-        alert('No transactions found for your search criteria');
+        
+      showAlert(`No transactions found for your search criteria`, 'warning');
+
       console.log('Stored transactions:', data);
     } catch (error) {
       console.error('Error fetching stored transactions:', error);
-      alert('Failed to fetch transactions');
+      showAlert(`Failed to fetch transactions`, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -202,9 +214,10 @@ export default function Transaction() {
 
       // Reset editing state
       setEditingTransaction(null);
+      showAlert('Updated transaction successfully','success');
     } catch (error) {
       console.error('Error updating transaction:', error);
-      alert('Failed to update transaction');
+      showAlert('Failed to update transaction','error');
     } finally {
       setIsLoading(false);
     }
@@ -228,10 +241,10 @@ export default function Transaction() {
       // Refresh the transactions list
       await fetchStoredTransactions();
 
-      alert('Transaction deleted successfully');
+      showAlert('Transaction deleted successfully','success');
     } catch (error) {
       console.error('Error deleting transaction:', error);
-      alert('Failed to delete transaction');
+      showAlert('Failed to delete transaction', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -266,7 +279,7 @@ export default function Transaction() {
   // Handle bulk delete
   const handleBulkDelete = async () => {
     if (selectedTransactions.size === 0) {
-      alert('No transactions selected');
+      showAlert('No transactions selected','warning');
       return;
     }
 
@@ -296,10 +309,10 @@ export default function Transaction() {
       // Refresh the transactions list
       await fetchStoredTransactions();
 
-      alert(`${selectedIds.length} transactions deleted successfully`);
+      showAlert(`${selectedIds.length} transactions deleted successfully`,'success');
     } catch (error) {
       console.error('Error deleting transactions:', error);
-      alert('Failed to delete some transactions');
+      showAlert('Failed to delete some transactions','error');
     } finally {
       setIsLoading(false);
     }
@@ -308,7 +321,7 @@ export default function Transaction() {
   // Open bulk edit mode
   const openBulkEdit = () => {
     if (selectedTransactions.size === 0) {
-      alert('No transactions selected');
+      showAlert('No transactions selected', 'warning');
       return;
     }
 
@@ -325,7 +338,7 @@ export default function Transaction() {
   // Handle bulk edit save
   const handleBulkEditSave = async () => {
     if (selectedTransactions.size === 0) {
-      alert('No transactions selected');
+      showAlert('No transactions selected','warning');
       return;
     }
 
@@ -346,7 +359,7 @@ export default function Transaction() {
 
       // If no fields were changed, show a message and return
       if (Object.keys(updatedData).length === 0) {
-        alert('No changes to save');
+        showAlert('No changes to save','warning');
         setBulkEditMode(false);
         return;
       }
@@ -367,10 +380,10 @@ export default function Transaction() {
       // Refresh the transactions list
       await fetchStoredTransactions();
 
-      alert(`${selectedIds.length} transactions updated successfully`);
+      showAlert(`${selectedIds.length} transactions updated successfully`,'success');
     } catch (error) {
       console.error('Error updating transactions:', error);
-      alert('Failed to update some transactions');
+      showAlert('Failed to update some transactions','error');
     } finally {
       setIsLoading(false);
     }
@@ -388,6 +401,13 @@ export default function Transaction() {
 
   return (
     <div className={styles.dashboard}>
+       {alertMessage && (
+        <AlertBanner
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setAlertMessage(null)}
+        />
+      )}
       <Card className={styles.fullPageCard}>
       <div style={{ flex: '1', display: 'flex', flexDirection: 'column'}}>
         <h2>Transactions</h2>
@@ -587,11 +607,6 @@ export default function Transaction() {
           </Box>
         )}
         </Card>
-
-
-
-
-
 
         
 
