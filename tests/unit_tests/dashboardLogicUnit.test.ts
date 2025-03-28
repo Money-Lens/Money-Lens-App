@@ -1,5 +1,6 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { describe, it, expect, beforeAll, afterEach, afterAll } from '@jest/globals';
 import  { connect, clearDatabase, closeDatabase } from '../testdb'
 
@@ -8,11 +9,16 @@ const { getTodaySpending, getMonthlySpending, getWeeklySpending, getRecentTransa
 const User = require('../../backend/models/User.model.js');
 const { Transaction } = require('../../backend/models/Transaction.model.js');
 =======
+=======
+>>>>>>> alertMessages
 import  { connect, clearDatabase, closeDatabase } from '../testdb'
 import {getTodaySpending,  getMonthlySpending, getWeeklySpending, getRecentTransactions, getDashboardData,} from '../../backend/logic/dashboardLogic';
 import  User  from '../../backend/models/User.model';
 import Transaction from '../../backend/models/Transaction.model'
+<<<<<<< HEAD
 >>>>>>> cf59f3a (Updated the imports and tests)
+=======
+>>>>>>> alertMessages
 
 beforeAll(async () => await connect());
 afterEach(async () => await clearDatabase());

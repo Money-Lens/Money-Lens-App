@@ -111,6 +111,7 @@ describe('Analysis Routes Integration Test', () => {
 
     expect(res.status).toBe(200);
 <<<<<<< HEAD
+<<<<<<< HEAD
     // The API returns an empty object for users not found, not a 404 error
     expect(res.body).toEqual({});
   });
@@ -119,4 +120,9 @@ describe('Analysis Routes Integration Test', () => {
 });
 
 >>>>>>> cf59f3a (Updated the imports and tests)
+=======
+    expect(res.body).toEqual({}); 
+});
+
+>>>>>>> alertMessages
 });

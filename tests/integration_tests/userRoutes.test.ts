@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> cf59f3a (Updated the imports and tests)
+=======
+>>>>>>> alertMessages
 import request from 'supertest';
 import express from 'express';
 import * as db from './testdb';
