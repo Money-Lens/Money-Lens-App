@@ -1,3 +1,4 @@
+
 name: Continuous Integration
 
 permissions:
@@ -6,19 +7,12 @@ permissions:
 on:
   pull_request:
     branches:
-<<<<<<< HEAD
       - develop
       - main
   push:
     branches:
       - develop
       - main
-=======
-      - SonarCloud 
-  push:
-    branches:
-      - SonarCloud 
->>>>>>> ed37b20 (testing implementation sonar cloud)
 
 jobs:
   build-and-test:
@@ -66,42 +60,42 @@ jobs:
           cd frontend
           npm run build
 
-# --- SonarCloud Analysis Step ---
       - name: Run SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: sonarsource/sonarqube-scan-action@v5.0.0
         with:
-          organization: "money-lens"   
-          projectKey: "Money-Lens_Money-Lens-App"       
-          projectName: "Money-Lens-App"          
+          args: >
+            -Dsonar.organization=money-lens
+            -Dsonar.projectKey=Money-Lens_Money-Lens-App
+            -Dsonar.projectName=Money-Lens-App
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # assign-reviewers:
-  #   if: github.event_name == 'pull_request'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Request Reviewers using GitHub Script
-  #       uses: actions/github-script@v6
-  #       with:
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         script: |
-  #           const prAuthor = context.payload.pull_request.user.login;
-  #           const reviewers = [
-  #             "Jashann",
-  #             "Aakash812",
-  #             "FilipKaramanov",
-  #             "ginellego",
-  #             "Sahil-Sharma-603",
-  #             "una-may"
-  #           ].filter(user => user !== prAuthor);
+  assign-reviewers:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Reviewers using GitHub Script
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prAuthor = context.payload.pull_request.user.login;
+            const reviewers = [
+              "Jashann",
+              "Aakash812",
+              "FilipKaramanov",
+              "ginellego",
+              "Sahil-Sharma-603",
+              "una-may"
+            ].filter(user => user !== prAuthor);
 
-  #           if (reviewers.length) {
-  #             await github.rest.pulls.requestReviewers({
-  #               owner: context.repo.owner,
-  #               repo: context.repo.repo,
-  #               pull_number: context.payload.pull_request.number,
-  #               reviewers: reviewers
-  #             });
-  #           } else {
-  #             console.log("No reviewers to assign after filtering PR author.");
-  #           }
+            if (reviewers.length) {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                reviewers: reviewers
+              });
+            } else {
+              console.log("No reviewers to assign after filtering PR author.");
+            }

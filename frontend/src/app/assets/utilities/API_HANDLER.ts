@@ -1,4 +1,4 @@
-import { Goal } from '../../types/goals';
+// import { Goal } from '../../types/goals';
 
 const BASE_URL = 'http://localhost:5001/api';
 
@@ -131,11 +131,38 @@ export type AnalysisResponse = {
   };
 };
 
+
+export type GoalsResponse = Goal[];  
+export type GoalType = 'Savings' | 'Spending Limit';
+export type SpendingPeriod = 'Daily' | 'Monthly' | 'Weekly' | 'Yearly';
+export type SubGoals = {
+  _id: string; 
+  name: string; 
+  amount: number; 
+  percent: number; 
+};
+
+export type Goal = {
+  _id: string;
+  name: string;
+  targetAmount: number;
+  currentAmount: number;
+  targetDate: Date;
+  category: string;
+  type: 'Savings' | 'Spending Limit';
+  interval?: 'Date' | 'Daily' |'Monthly' | 'Weekly' | 'Yearly';
+  userId: string; 
+  selectedAccount: string[]; 
+  subGoals: SubGoals[]; 
+};
+
 // Top sources (for analysis)
 type TopSources = {
   topSpending: { name: string; amount: number }[];
   topEarning: { name: string; amount: number }[];
 };
+
+
 
 // Update apiRequest function
 export async function apiRequest<T>(

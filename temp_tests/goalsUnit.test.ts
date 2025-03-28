@@ -1,6 +1,7 @@
 import { jest, describe, test, expect } from '@jest/globals';
 import mongoose from 'mongoose';
-const Goal = require('../backend/models/Goal');
+import { Goal } from '../backend/models/Goal.model';
+// const Goal = require('../backend/models/Goal');
 
 
 describe('Goal Model Unit Tests', () => {

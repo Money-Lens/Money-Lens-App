@@ -1,5 +1,5 @@
 .container {
-  padding: 1rem;
+  /* padding: 1rem; */
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -33,7 +33,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .addButton {
@@ -56,6 +56,32 @@
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.goalCardSubGoals {
+  display: flex;
+  justify-content: space-between; /* Items on far left & far right */
+  align-items: center; /* Align items vertically */
+  width: 100%; /* Ensure full width */
+}
+
+.subGoalItem {
+  flex: 1; /* Allow items to take space */
+}
+
+.subGoalItem:first-child {
+  text-align: left; /* Align left */
+}
+
+.subGoalItem:last-child {
+  text-align: right; /* Align right */
+}
+
+.goalCardSubGoals .subGoal {
+  flex: 1;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
 }
 
 .progressBar {
@@ -273,4 +299,53 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.savingsGoal {
+  display: flex; 
+  flex-direction: column;
+}
+
+.subGoals {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0px 10px 0px; 
+}
+
+.subGoalsInput {
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+}
+
+.subGoalsInput input[type="number"]::-webkit-outer-spin-button,
+.subGoalsInput input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.subGoalsInput input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+.goalAmount input[type="number"]::-webkit-outer-spin-button,
+.goalAmount input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.goalAmount input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+.limitAmount input[type="number"]::-webkit-outer-spin-button,
+.limitAmount input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.limitAmount input[type="number"] {
+  -moz-appearance: textfield;
 }

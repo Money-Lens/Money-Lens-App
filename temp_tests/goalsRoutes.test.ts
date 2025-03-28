@@ -2,7 +2,7 @@ import { jest, describe, test, expect, beforeAll, afterAll, afterEach } from '@j
 const request = require('supertest');
 const express = require('express');
 const db = require('./testdb');
-const Goal = require('../../backend/models/Goal');
+import { Goal } from '../backend/models/Goal.model';
 const goalsRoutes = require('../../backend/routes/goalsRoutes');
 
 const app = express();
@@ -12,7 +12,7 @@ app.use('/goals', goalsRoutes);
 // Mock auth middleware
 jest.mock('../../backend/middleware/auth.middleware', () => {
   return (req: any, res: any, next: any) => {
-    req.user = { 
+    req.user = {  
       _id: '65fc123456789abcdef12345',
       id: '65fc123456789abcdef12345'
     }; // Mock user ID
