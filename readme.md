@@ -17,9 +17,9 @@ Money Lens is a web application designed to simplify the process of managing per
 
 ### Commit log description message:
 
-"Feature##-UserStory##-SubTask## description of task"
-eg. "01-09-39 implemented login form fields and buttons for UI"
-for feature #01 (Authentication System), user story #09 (Login), subtask #39 (Login UI)
+"Feature and description of task"
+eg. "implemented login form fields and buttons for UI"
+for feature (Authentication System), user story (Login), subtask(Login UI)
 
 ### Branches:
 
@@ -33,6 +33,7 @@ feature - a branch for each feature
 
 ```bash
 Money-Lens-App/
+├── action-runner/
 ├── backend/
 │   ├── logic/
 │   ├── middleware/
@@ -56,17 +57,17 @@ Money-Lens-App/
 │   │   ├── pages/
 │   │   │   ├── analytics/
 │   │   │   ├── dashboard/
-│   │   │   │   ├── components/
 │   │   │   ├── forgot-password/
 │   │   │   ├── goals/
 │   │   │   ├── plaid-setup/
 │   │   │   ├── signup/
 │   │   │   ├── transactions/
+│   │   ├── types/
 │
 └── tests/
-    ├── unit/
-    ├── integration/
-    ├── acceptance/
+    ├── unit_tests/
+    ├── integration_tests/
+    ├── coverage/
 ```
 
 ### Running the App
@@ -93,6 +94,7 @@ Money-Lens-App/
 - `npm install`
 - Once in backend directory, run `node server.js`. Note: Won't reload by itself.
 - Once in backend directory, run `npm start` for auto-reload.
+- Make sure there is a .env file in the backend repository as provided by a team member. 
 - Node: you must .env file that has MONGO_URI=mongodb+srv://<username>:<password>@cluster0.p23io.mongodb.net/Money-Lens-MongoDB?retryWrites=true&w=majority
 - Note: Replace `username` & `password` with actual credentials.
 
@@ -127,13 +129,7 @@ Run test coverage
 
 ### Test Account for Sign ins
 
-For the Money Lens app:
-
-user: ginelletemull@gmail.com
-
-password: test123
-
-For Plaid account connection:
+For Plaid account connection - ** When using production environment **:
 
 user: user_good
 
