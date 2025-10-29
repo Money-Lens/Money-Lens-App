@@ -22,9 +22,7 @@ app.use(cookieParser());
 
 // MongoDB Connection
 mongoose
-  .connect(
-    'mongodb+srv://jashangill3592:4GQyPIRwT6lm5IiE@cluster0.p23io.mongodb.net/Money-Lens-MongoDB?retryWrites=true&w=majority'
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch((err) => console.error('❌ MongoDB Connection Error:', err));
   
